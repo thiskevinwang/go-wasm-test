@@ -13,14 +13,6 @@ import (
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
-// from repo root
-// GOOS=js GOARCH=wasm go build -o html/main.wasm html/main.go
-//
-// from html dir
-// GOOS=js GOARCH=wasm go build -o main.wasm main.go
-//
-// prerequisites:
-// cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./html
 func main() {
 	done := make(chan struct{}, 0)
 	js.Global().Set("wasmHash", js.FuncOf(hash))
