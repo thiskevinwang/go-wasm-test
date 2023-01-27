@@ -13,10 +13,16 @@
     </script>
   </head>
   <body>
+    <h1>WebAssembly</h1>
     <div>
-      <label for="inputField">Enter value</label>
-      <input id="inputField" name="Hash" type="text" />
-      <pre><code id="outputHash" /></pre>
+      <label for="inputField">SHA 512: </label>
+      <input
+        id="inputField"
+        name="Hash"
+        type="text"
+        placeholder="enter some text"
+      />
+      <pre><code id="outputHash"></code></pre>
     </div>
     <script>
       var inputField = document.querySelector("#inputField");
@@ -40,8 +46,8 @@
         max="10000"
       />
       <label for="nanoid_length"
-        >Length: <span id="nanoid_length_label"
-      /></label>
+        >Length: <span id="nanoid_length_label"></span
+      ></label>
 
       <pre><code id="outputNanoid" style="white-space: pre-wrap;word-break: break-all;"></code></pre>
     </div>
@@ -50,7 +56,10 @@
       slider.addEventListener("input", function () {
         var nanoidLength = slider.value;
         document.querySelector("#nanoid_length_label").innerHTML = nanoidLength;
+        const start = performance.now();
         const nanoid = wasmNanoid(nanoidLength);
+        const end = performance.now();
+        console.log(`Nanoid generation took ${end - start} milliseconds.`);
         outputNanoid.innerHTML = nanoid;
       });
       var button = document.querySelector("#genNanoid");
@@ -61,10 +70,7 @@
         const start = performance.now();
         const nanoid = wasmNanoid(nanoidLength); // The function 'wasmNanoid' is defined in the Go code
         const end = performance.now();
-        console.log(
-          `Nanoid generation took ${end - start} milliseconds.`,
-          nanoidLength
-        );
+        console.log(`Nanoid generation took ${end - start} milliseconds.`);
         outputNanoid.innerHTML = nanoid;
       });
     </script>
@@ -72,8 +78,30 @@
     <hr />
 
     <div>
+      <button id="genGoUuid" type="button">Generate Uuid</button>
+      <pre><code id="outputGoUuid"></code></pre>
+    </div>
+
+    <script>
+      var button = document.querySelector("#genGoUuid");
+      var outputUuid = document.querySelector("#outputGoUuid");
+      button.addEventListener("click", function () {
+        // measure time:
+        const start = performance.now();
+        const uuid = wasmUuid();
+        const end = performance.now();
+        console.log(`Uuid generation took ${end - start} milliseconds.`);
+        outputGoUuid.innerHTML = uuid;
+      });
+    </script>
+
+    <hr />
+
+    <h1>Native JS</h1>
+
+    <div>
       <button id="genUuid" type="button">Generate Uuid</button>
-      <pre><code id="outputUuid" /></pre>
+      <pre><code id="outputUuid"></code></pre>
     </div>
     <script>
       var button = document.querySelector("#genUuid");
