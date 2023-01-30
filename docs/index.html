@@ -11,6 +11,7 @@
         go.run(result.instance);
       });
     </script>
+    <script type="module" src="nanoid.js"></script>
   </head>
   <body>
     <h1>WebAssembly</h1>
@@ -53,19 +54,18 @@
     </div>
     <script>
       var slider = document.querySelector("#nanoid_length");
-      slider.addEventListener("input", function () {
-        var nanoidLength = slider.value;
+      slider.addEventListener("input", function (e) {
+        var nanoidLength = e.target.value;
         document.querySelector("#nanoid_length_label").innerHTML = nanoidLength;
         const start = performance.now();
-        const nanoid = wasmNanoid(nanoidLength);
+        outputNanoid.innerHTML = wasmNanoid(nanoidLength);
         const end = performance.now();
         console.log(`Nanoid generation took ${end - start} milliseconds.`);
-        outputNanoid.innerHTML = nanoid;
       });
       var button = document.querySelector("#genNanoid");
       var outputNanoid = document.querySelector("#outputNanoid");
       button.addEventListener("click", function () {
-        var nanoidLength = slider.value;
+        var nanoidLength = document.querySelector("#nanoid_length").value;
         // measure time:
         const start = performance.now();
         const nanoid = wasmNanoid(nanoidLength); // The function 'wasmNanoid' is defined in the Go code
@@ -113,6 +113,47 @@
         const end = performance.now();
         console.log(`Uuid generation took ${end - start} milliseconds.`);
         outputUuid.innerHTML = uuid;
+      });
+    </script>
+
+    <div>
+      <button id="genNanoidJs" type="button">Generate Nanoid</button>
+
+      <input
+        type="range"
+        id="nanoid_js_length"
+        name="Length"
+        min="21"
+        value="21"
+        max="10000"
+      />
+      <label for="nanoid_js_length"
+        >Length: <span id="nanoid_js_length_label"></span
+      ></label>
+
+      <pre><code id="outputNanoidJs" style="white-space: pre-wrap;word-break: break-all;"></code></pre>
+    </div>
+    <script>
+      var slider = document.querySelector("#nanoid_js_length");
+      slider.addEventListener("input", function (e) {
+        var nanoidLength = e.target.value;
+        document.querySelector("#nanoid_js_length_label").innerHTML =
+          nanoidLength;
+        const start = performance.now();
+        const nanoid = nanoidJs(nanoidLength);
+        const end = performance.now();
+        console.log(`Nanoid generation took ${end - start} milliseconds.`);
+        outputNanoidJs.innerHTML = nanoid;
+      });
+      var button = document.querySelector("#genNanoidJs");
+      var outputNanoidJs = document.querySelector("#outputNanoidJs");
+      button.addEventListener("click", function () {
+        var nanoidLength = document.querySelector("#nanoid_js_length").value;
+        // measure time:
+        const start = performance.now();
+        outputNanoidJs.innerHTML = nanoidJs(nanoidLength);
+        const end = performance.now();
+        console.log(`Nanoid generation took ${end - start} milliseconds.`);
       });
     </script>
   </body>
